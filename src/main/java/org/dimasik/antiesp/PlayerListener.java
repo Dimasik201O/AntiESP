@@ -18,14 +18,7 @@ public class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         if (AntiESP.getInstance().getPluginConfig().getBoolean("debug")) {
-            String penis = "мне лень было делать дебаг, багов вроде нет, если что отпишите тг @Dimasik_v201O";
-            AntiESP.getInstance().getLogger().info(penis);
-            AntiESP.getInstance().getLogger().info(penis);
-            AntiESP.getInstance().getLogger().info(penis);
-            AntiESP.getInstance().getLogger().info(penis);
-            AntiESP.getInstance().getLogger().info(penis);
-            AntiESP.getInstance().getLogger().info(penis);
-            AntiESP.getInstance().getLogger().info(penis);
+            // мне лень было делать дебаг, багов вроде нет, если что отпишите тг @Dimasik_v201O
             AntiESP.getInstance().getLogger().info("Игрок зашел: " + event.getPlayer().getName());
         }
     }
