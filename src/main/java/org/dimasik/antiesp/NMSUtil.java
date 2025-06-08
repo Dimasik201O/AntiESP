@@ -10,6 +10,10 @@ import java.util.List;
 
 public class NMSUtil {
     public static boolean canSee(Player viewer, Player target) {
+        if (viewer.hasPermission("antiesp.bypass")){
+            return true;
+        }
+
         if (isBehind(viewer, target) && viewer.getLocation().distance(target.getLocation()) >= 1.5) {
             return false;
         }
