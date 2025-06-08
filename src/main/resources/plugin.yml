@@ -1,0 +1,4 @@
+name: AntiESP
+version: '${project.version}'
+main: org.dimasik.antiesp.AntiESP
+api-version: '1.16'
