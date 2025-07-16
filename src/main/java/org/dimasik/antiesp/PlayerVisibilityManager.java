@@ -10,12 +10,17 @@ import static org.bukkit.Bukkit.getServer;
 public class PlayerVisibilityManager {
     private final Map<UUID, Set<UUID>> hiddenFrom = new ConcurrentHashMap<>();
     private final Map<UUID, Set<UUID>> hiddenItemsFrom = new ConcurrentHashMap<>();
+    private final Map<UUID, Set<UUID>> destroyFrom = new ConcurrentHashMap<>();
 
     public void hidePlayer(Player hider, Player target) {
         UUID hiderId = hider.getUniqueId();
         UUID targetId = target.getUniqueId();
 
         hiddenItemsFrom.computeIfAbsent(targetId, k -> new HashSet<>()).add(hiderId);
+        if(target.hasPotionEffect(PotionEffectType.INVISIBILITY) || target.isSneaking()){
+            destroyFrom.computeIfAbsent(targetId, k -> new HashSet<>()).add(hiderId);
+            NMSUtil.sendDestroyPacket(hider, target);
+        }
         NMSUtil.hidePlayerItems(hider, target);
     }
 
@@ -24,7 +29,19 @@ public class PlayerVisibilityManager {
         UUID targetId = target.getUniqueId();
 
         if (hiddenItemsFrom.getOrDefault(targetId, Collections.emptySet()).remove(viewerId)) {
+            setPlayerVisible(viewer, target);
             NMSUtil.showPlayerItems(viewer, target);
+        }
+    }
+
+    public void setPlayerVisible(Player viewer, Player target) {
+        UUID viewerId = viewer.getUniqueId();
+        UUID targetId = target.getUniqueId();
+
+        if (destroyFrom.getOrDefault(targetId, Collections.emptySet()).remove(viewerId)) {
+            NMSUtil.sendSpawnPacket(viewer, target);
+            NMSUtil.sendHeadRotationPacket(viewer, target);
+            NMSUtil.sendInvisibilityPacket(viewer, target, target.hasPotionEffect(PotionEffectType.INVISIBILITY));
         }
     }
 

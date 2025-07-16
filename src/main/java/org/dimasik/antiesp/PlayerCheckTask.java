@@ -2,6 +2,7 @@ package org.dimasik.antiesp;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerCheckTask extends BukkitRunnable {
@@ -19,7 +20,9 @@ public class PlayerCheckTask extends BukkitRunnable {
             Bukkit.getOnlinePlayers().forEach(target -> {
                 if (viewer.equals(target)) return;
                 if (viewer.getWorld() != target.getWorld()) return;
-
+                if(!target.hasPotionEffect(PotionEffectType.INVISIBILITY) && !target.isSneaking()){
+                    visibilityManager.setPlayerVisible(viewer, target);
+                }
                 double distance = viewer.getLocation().distance(target.getLocation());
                 int maxRadius = AntiESP.getInstance().getPluginConfig().getInt("max-radius", 64);
                 if (distance > maxRadius) {
