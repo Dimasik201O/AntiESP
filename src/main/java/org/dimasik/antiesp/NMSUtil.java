@@ -10,6 +10,7 @@ import org.bukkit.craftbukkit.v1_16_R3.inventory.CraftItemStack;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.List;
@@ -18,6 +19,14 @@ public class NMSUtil {
     public static boolean canSee(Player viewer, Player target) {
         if (viewer.hasPermission("antiesp.bypass")){
             return true;
+        }
+
+        if (target.hasPotionEffect(PotionEffectType.GLOWING)){
+            return true;
+        }
+
+        if(viewer.hasPotionEffect(PotionEffectType.BLINDNESS) && viewer.getLocation().distance(target.getLocation()) >= 5){
+            return false;
         }
 
         if (isBehind(viewer, target) && viewer.getLocation().distance(target.getLocation()) >= 2.25) {

@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashSet;
+
 public class PlayerCheckTask extends BukkitRunnable {
     private final PlayerVisibilityManager visibilityManager;
 
@@ -21,6 +23,9 @@ public class PlayerCheckTask extends BukkitRunnable {
                 if (viewer.equals(target)) return;
                 if (viewer.getWorld() != target.getWorld()) return;
                 if(!target.hasPotionEffect(PotionEffectType.INVISIBILITY) && !target.isSneaking()){
+                    visibilityManager.setPlayerVisible(viewer, target);
+                }
+                else if(!viewer.hasPotionEffect(PotionEffectType.BLINDNESS) || viewer.getLocation().distance(target.getLocation()) < 5){
                     visibilityManager.setPlayerVisible(viewer, target);
                 }
                 double distance = viewer.getLocation().distance(target.getLocation());

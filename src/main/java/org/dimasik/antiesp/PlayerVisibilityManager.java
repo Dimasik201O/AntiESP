@@ -21,6 +21,10 @@ public class PlayerVisibilityManager {
             destroyFrom.computeIfAbsent(targetId, k -> new HashSet<>()).add(hiderId);
             NMSUtil.sendDestroyPacket(hider, target);
         }
+        else if(hider.hasPotionEffect(PotionEffectType.BLINDNESS) && hider.getLocation().distance(target.getLocation()) >= 5d){
+            destroyFrom.computeIfAbsent(targetId, k -> new HashSet<>()).add(hiderId);
+            NMSUtil.sendDestroyPacket(hider, target);
+        }
         NMSUtil.hidePlayerItems(hider, target);
     }
 
